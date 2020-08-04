@@ -106,6 +106,7 @@ def read_dicoms(path, primary=True, original=True):
     for dir, _, fnames in os.walk(path):
         [allfnames.append(os.path.join(dir, fname)) for fname in fnames]
 
+
     dcm_header_info = []
     dcm_parameters = []
     unique_set = []  # need this because too often there are duplicates of dicom files with different names

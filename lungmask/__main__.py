@@ -34,17 +34,24 @@ def main():
 
     args = parser.parse_args(argsin)
 
-    print("input file ",args.input)
-
     batchsize = args.batchsize
 
     if args.cpu:
         batchsize = 1
-    
-    input_image = utils.get_input_image(args.input)
+
+    cwd = os.getcwd()
+    pwd = os.path.dirname(cwd)
+    patient_id = os.split(pwd)[-1]
+
+    image_filename = pwd + args.input
+
+    output_filename = pwd + args.output + patient_id + ".dcm"
+
+    print(output_filename)
+    input_image = utils.get_input_image(image_filename)
 
     logging.info(f'Load model')
-    
+
     if args.modelname == 'LTRCLobes_R231':
         result = mask.apply_fused(input_image, force_cpu=args.cpu, batch_size=batchsize, volume_postprocessing=not(args.nopostprocess), noHU=args.noHU)
     else:
@@ -61,7 +68,8 @@ def main():
     result_out= sitk.GetImageFromArray(result)
     result_out.CopyInformation(input_image)
     logging.info(f'Save result to: {args.output}')
-    sys.exit(sitk.WriteImage(result_out, args.output))
+
+    sys.exit(sitk.WriteImage(result_out, output_filename))
 
 
 if __name__ == "__main__":
