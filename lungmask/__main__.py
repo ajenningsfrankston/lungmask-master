@@ -5,7 +5,6 @@ from lungmask import mask
 from lungmask import utils
 import os
 import SimpleITK as sitk
-import pkg_resources
 import numpy as np
 
 
@@ -41,11 +40,12 @@ def main():
 
     cwd = os.getcwd()
     pwd = os.path.dirname(cwd)
-    patient_id = os.split(pwd)[-1]
 
     image_filename = pwd + args.input
 
-    output_filename = pwd + args.output + patient_id + ".dcm"
+    patient_id = os.path.split(image_filename)[-1]
+
+    output_filename = pwd + args.output + "/" + patient_id + ".dcm"
 
     print(output_filename)
     input_image = utils.get_input_image(image_filename)
